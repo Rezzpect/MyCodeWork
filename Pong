@@ -1,50 +1,51 @@
 #include<Wire.h>
 #include<Adafruit_GFX.h>
 #include<Adafruit_SSD1306.h>
-#define WIN_H=64
-#define WIN_W=128
-#define OLED_RESET=-1
-#define speakerPin
-#define Cnl
+#define WIN_H 32
+#define WIN_W 128
+#define OLED_RESET -1
+#define speakerPin A2
+#define controlPin A1
+#define oledPin A0
 #define WHITE 0xFFFF
 #define BLACK 0x0000
 
-Adafruit_SSD1306 OLED(WIN_W,WIN_H,&Wire,OLED_RESET)
+Adafruit_SSD1306 OLED(WIN_W,WIN_H,&Wire,OLED_RESET);
 
-int speedx=3
-int speedy=3
+int speedx=3;
+int speedy=3;
 int cur_x,move_x=0,move_y=0;
-const int cur_y = 62;
-int ball_x,ball_y;
+const int cur_y = 30;
+int ball_x=64,ball_y=5;
 bool gameState=true;
 
 void start(){
   OLED.drawPixel(ball_x,ball_y,WHITE);
-  OLED.drawFastVline(cur_x,cur_y,5,WHITE);
+  OLED.drawFastVLine(cur_x,cur_y,5,WHITE);
 }
 
 void move_ball(){
   int ball_move_x=0,ball_move_y=0;
-  OLED.drawPixel(ball_x,ball_y,Black);
+  OLED.drawPixel(ball_x,ball_y,BLACK);
   ball_move_x=ball_x+speedx;
   ball_move_y=ball_y+speedy;
 
-  if(ball_move_x==0){
+  if(ball_move_x<=0){
     speedx*=-1;
     BumpSound();
   }
-  if(ball_move_x==MAX){
-    speedx_*=-1;
+  if(ball_move_x>=127){
+    speedx*=-1;
     BumpSound();
   }
-  if(ball_move_y==MAX){
+  if(ball_move_y>=31){
     gameState=false;
   }
-  if(ball_move_y==0){
+  if(ball_move_y<=0){
     speedy*=-1;
     BumpSound();
   }
-  if(ball_move_y==62 && ball_move_x >= cur_x && ball_move_x <= cur_x+5){
+  if(ball_move_y==30 && ball_move_x >= cur_x && ball_move_x <= cur_x+5){
     speedx*=-1;
     BumpSound();
   }
@@ -54,49 +55,56 @@ void move_ball(){
 }
 
 void move_board(){
-  int val=AnalogRead(Cnl)
-  OLED.drawFastVline(cur_x,cur_y,5,BLACK);
-  move_x=OLED.map(val,);
+  int val=analogRead(controlPin);
+  OLED.drawFastVLine(cur_x,cur_y,5,BLACK);
+  move_x=map(val,0,1023,0,123);
   cur_x=move_x;
-  OLED.drawFastVline(cur_x,cur_y,5,WHITE);
+  OLED.drawFastVLine(cur_x,cur_y,5,WHITE);
 }
 
-void PLaying(int n){
+void Playing(){
     move_ball();
     move_board();
-    OLED.Display();
+    OLED.display();
 }
 
 void GameOver()
 {   OLED.clearDisplay();
-    ball_x=
-    ball_y=10;
-    OLED.setCursor(x,y);
-    OLED.println("LOL YOU FUCKING IDIOT!");
-    OLED.Display();
-    Delay(5000);
+    ball_x=64;
+    ball_y=5;
+    OLED.setCursor(10,15);
+    OLED.println("Game Over");
+    OLED.display();
+    delay(5000);
     OLED.clearDisplay();
     start();
     gameState=true;
 }
 
 void BumpSound(){
-  Tone(speakerPin,415);
+  tone(speakerPin,415);
+  delay(100);
+  noTone(speakerPin);
 }
 
 void setup() {
   Adafruit_SSD1306 OLED(OLED_RESET);
   OLED.setTextSize(2);
   OLED.setTextColor(WHITE);
+  OLED.setCursor(10,15);
+  OLED.println("PONG");
+  OLED.display();
+  delay(3000);
+  OLED.clearDisplay();
   start();
-  OLED.Display();
+  OLED.display();
 }
 
 void loop() {
-  if(gameState)==1){
+  if(gameState=true){
     Playing();
   }
-  if(gameState==0){
+  if(gameState=false){
     GameOver();
   }
 

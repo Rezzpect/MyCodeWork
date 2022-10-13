@@ -26,17 +26,17 @@ typedef const struct State SType;
 
 SType FSM[13]={{B01001100,2000,{goW,goW,waitW,waitW,waitPW,waitPW,waitPS,waitW}},  //goW
 	{B01001010,300,{goS,goS,goS,goS,goS,goS,goS,goS}},                               //waitW
-	{B01100001,2000,{goS,waitS,goS,waitS,goP,waitPS,waitPS,waitPS}},                 //goS
+	{B01100001,2000,{goS,waitS,goS,waitPS,goP,waitPS,waitPS,waitPS}},                 //goS
 	{B01010001,300,{goW,goW,goW,goW,goW,goW,goW,goP}},                               //waitS
   {B01010001,300,{goP,goP,goP,goP,goP,goP,goP,goP}},                               //waitPS
   {B01001010,300,{goP,goP,goP,goP,goP,goP,goP,goP}},                               //waitPW
   {B10001001,2000,{goP,brink,brink,brink,goP,brink,brink,brink}},                  //goP
-  {B00001001,500,{8,8,8,8,8,8,8,8}},                                               //brink
-  {B10001001,500,{9,9,9,9,9,9,9,9}},
-  {B00001001,500,{10,10,10,10,10,10,10,10}},
-  {B10001001,500,{11,11,11,11,11,11,11,11}},
-  {B00001001,500,{12,12,12,12,12,12,12,12}},
-  {B10001001,500,{goP,goW,goS,goW,goP,goW,goS,goW}},                                              
+  {B00001001,300,{8,8,8,8,8,8,8,8}},                                               //brink
+  {B10001001,300,{9,9,9,9,9,9,9,9}},                                               //8
+  {B00001001,300,{10,10,10,10,10,10,10,10}},                                       //9
+  {B10001001,300,{11,11,11,11,11,11,11,11}},                                       //10
+  {B00001001,300,{12,12,12,12,12,12,12,12}},                                       //11
+  {B10001001,300,{goP,goW,goS,goW,goP,goW,goS,goW}},                               //12           
 };
 
 unsigned long S=0;  // index to the current state   
@@ -71,4 +71,3 @@ void loop() {
   PEOPLE_BUTTON = digitalRead(PEOPLE_WALK_PIN);
   input = (SOUTH_BUTTON*2)+WEST_BUTTON+(PEOPLE_BUTTON*4);
   S = FSM[S].Next[input]; 
-}

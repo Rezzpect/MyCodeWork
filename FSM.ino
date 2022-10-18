@@ -2,11 +2,11 @@
 #define LED_W_Y 6
 #define LED_W_G 7
 #define WEST_BUTTON_PIN 2
-#define LED_S_R 9
-#define LED_S_Y 10
-#define LED_S_G 11
-#define LED_P_R 12
-#define LED_P_G 13
+#define LED_S_R 8
+#define LED_S_Y 9
+#define LED_S_G 10
+#define LED_P_R 11
+#define LED_P_G 12
 #define SOUTH_BUTTON_PIN 3
 #define goW 0
 #define waitW 1
@@ -24,10 +24,10 @@ unsigned long Next[8];}; // next state for inputs 0,1,2,3
 
 typedef const struct State SType;
 
-SType FSM[13]={{B01001100,2000,{goW,goW,waitW,waitW,waitPW,waitPW,waitPS,waitW}},  //goW
+SType FSM[13]={{B01001100,2000,{goW,goW,waitW,waitW,waitPW,waitPW,waitPW,waitW}},  //goW
 	{B01001010,300,{goS,goS,goS,goS,goS,goS,goS,goS}},                               //waitW
-	{B01100001,2000,{goS,waitS,goS,waitPS,goP,waitPS,waitPS,waitPS}},                 //goS
-	{B01010001,300,{goW,goW,goW,goW,goW,goW,goW,goP}},                               //waitS
+	{B01100001,2000,{goS,waitS,goS,waitS,waitPS,waitPS,waitPS,waitPS}},                 //goS
+	{B01010001,300,{goW,goW,goW,goW,goW,goW,goW,goW}},                               //waitS
   {B01010001,300,{goP,goP,goP,goP,goP,goP,goP,goP}},                               //waitPS
   {B01001010,300,{goP,goP,goP,goP,goP,goP,goP,goP}},                               //waitPW
   {B10001001,2000,{goP,brink,brink,brink,goP,brink,brink,brink}},                  //goP
@@ -71,3 +71,4 @@ void loop() {
   PEOPLE_BUTTON = digitalRead(PEOPLE_WALK_PIN);
   input = (SOUTH_BUTTON*2)+WEST_BUTTON+(PEOPLE_BUTTON*4);
   S = FSM[S].Next[input]; 
+}
